@@ -1,6 +1,7 @@
 Descrição do problema:
 
 see more em: https://sig-arq.ufpb.br/arquivos/2024121132b7e163354563f0e1b1397dd/Projeto_Final_2023_2_.pdf
+to run project in terminal: g++ main.cpp entities/job.cpp entities/server.cpp -o main && ./main
 
 Contexto:
 
