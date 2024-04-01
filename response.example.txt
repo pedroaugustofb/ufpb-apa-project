@@ -1,0 +1,8 @@
+< valor da solucao >
+< custo de alocacao nos servidores >
+< custo associado a jobs executados localmente >
+
+< lista de jobs alocados no servidor 1>
+< lista de jobs alocados no servidor 2>
+...
+< lista de jobs alocados no servidor m >
