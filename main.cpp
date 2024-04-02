@@ -3,9 +3,13 @@
 #include <vector>
 #include <time.h>
 #include <stdexcept>
+#include <ctime>
+
+// entities
 #include "entities/job.h"
 #include "entities/server.h"
-#include <ctime>
+
+// cpp
 #include "guloso.cpp"
 #include "print-matrix.cpp"
 #include "log.cpp"
@@ -13,16 +17,9 @@
 using namespace std;
 
 // to run project in terminal: g++ main.cpp entities/job.cpp entities/server.cpp -o main && ./main
+// to see input.txt format check README.md
 
 #define INPUT_FILE_PATH "input.txt"
-
-// file format
-// jobsLenght
-// serversLenght
-// localServerCost
-// empty line
-// servers capacities (in line like "220 350" means server 1 has capacity 220 and server 2 has capacity 350)
-// empty line
 
 int main () {
     try{
