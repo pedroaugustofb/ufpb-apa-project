@@ -11,3 +11,11 @@ int Server::getCapacity() {
 void Server::setCapacity(int capacity) {
     this->capacity = capacity;
 }
+
+void Server::increseUsage(int usage) {
+    this->usage += usage;
+}
+
+int Server::getUsage() {
+    return this->usage;
+}
