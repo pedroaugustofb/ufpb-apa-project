@@ -44,7 +44,7 @@ vector<int> vnd(int **duration_matrix, int **cost_matrix, int local_server_cost,
 
                 clock_t start_swap_intra = clock();
 
-                swapIntra(duration_matrix, cost_matrix, local_server_cost, servers, local_server, rows, columns, greedy_solution);
+                solution = swapIntra(duration_matrix, cost_matrix, local_server_cost, servers, local_server, rows, columns, greedy_solution);
 
                 clock_t end_swap_intra = clock();
 
@@ -59,7 +59,7 @@ vector<int> vnd(int **duration_matrix, int **cost_matrix, int local_server_cost,
             //     break;
         }
 
-
+    
         neighborhoods_solutions.push_back(solution);
         
         neighborhood++;
