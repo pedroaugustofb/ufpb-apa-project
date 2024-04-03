@@ -9,7 +9,7 @@
 using namespace std;
 
 
-int swapIntra(int **duration_matrix, int **cost_matrix, int local_server_cost, vector<Server> servers, LocalServer local_server, int rows, int columns, int greedy_solution){
+int swapIntra(int **duration_matrix, int **cost_matrix, int local_server_cost, vector<Server> &servers, LocalServer &local_server, int rows, int columns, int best_solution){
     // 1. iterar cada servidor
     // 2. para cada servidor, iterar cada job
     // 3. para cada job, iterar cada outro job
@@ -46,9 +46,9 @@ int swapIntra(int **duration_matrix, int **cost_matrix, int local_server_cost, v
                 cost += local_server.getCost();
 
 
-                if(cost < greedy_solution){
+                if(cost < best_solution){
                     servers = servers_copy;
-                    greedy_solution = cost;
+                    best_solution = cost;
                     changed = true;
                 }
             }
@@ -80,27 +80,16 @@ int swapIntra(int **duration_matrix, int **cost_matrix, int local_server_cost, v
                 cost += local_server_copy.getCost();
 
 
-                if(cost < greedy_solution){
+                if(cost < best_solution){
                     servers = servers_copy;
                     local_server = local_server_copy;
-                    greedy_solution = cost;
+                    best_solution = cost;
                     changed = true;
                 }
             }
         }
     }
     
-    if (changed){
-        log("Showing swap intra solution...");
-        printSolution(servers, local_server, duration_matrix, cost_matrix, rows, columns);
-    }
-    else {
-        log("----------------------------------------------------- |");
-        log("No changes were made in Swap-Intra neighborhood");
-        log("because the swap was not beneficial");
-        log("----------------------------------------------------- |");
-    }
-
     int servers_total_cost = 0;
     int local_server_total_cost = local_server.getCost();
 

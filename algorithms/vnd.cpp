@@ -24,47 +24,41 @@ using namespace std;
  * @param local_server              vector with the local server
  * @param rows                      number of jobs 
  * @param columns                   number of servers
- * @param greedy_solution           cost of the greedy solution to compare
+ * @param best_solution             solution by previus algorithm (greedy)
  * 
  * @obs:                            both matrices have the same size
  * @obs:                            both matrices are not the original ones, because they are sorted by cost in the greedy algorithm
 */
-vector<int> vnd(int **duration_matrix, int **cost_matrix, int local_server_cost, vector<Server> &servers, LocalServer &local_server, int rows, int columns, int greedy_solution){
+void vnd(int **duration_matrix, int **cost_matrix, int local_server_cost, vector<Server> &servers, LocalServer &local_server, int rows, int columns, int best_solution){
 
-    int neighborhoods = 3, neighborhood = 1;
-    vector<int> neighborhoods_solutions;
+    vector<Server> servers_copy = servers;
+    LocalServer local_server_copy = local_server;
+    int best_solution_copy = best_solution;
 
-    while(neighborhood <= neighborhoods){
+    bool improvement = true;
 
-        int solution;
+    do {
+
+        improvement = false;
         
-        switch(neighborhood){
-            case 1:
-                log("Starting Swap-Intra neighborhood...");
+        int SWAP_INTRA_SOLUTION = swapIntra(duration_matrix, cost_matrix, local_server_cost, servers_copy, local_server_copy, rows, columns, best_solution_copy);
 
-                clock_t start_swap_intra = clock();
-
-                solution = swapIntra(duration_matrix, cost_matrix, local_server_cost, servers, local_server, rows, columns, greedy_solution);
-
-                clock_t end_swap_intra = clock();
-
-                log("Swap-Intra neighborhood time execution " + to_string((double)(end_swap_intra - start_swap_intra) / CLOCKS_PER_SEC) + "s");
-                endl();
-                break;
-            // case 2:
-            //     log("Starting second neighborhood (Two-Opt)...");
-            //     break;
-            // case 3:
-            //     log("Starting third neighborhood (Swap-Inter)...");
-            //     break;
+        if(SWAP_INTRA_SOLUTION < best_solution_copy){
+            best_solution_copy = SWAP_INTRA_SOLUTION;
+            improvement = true;
         }
 
-    
-        neighborhoods_solutions.push_back(solution);
-        
-        neighborhood++;
+    } while(improvement);
 
+    if (best_solution < best_solution_copy) {
+        return log("VND did not find a better solution than Greedy");
     }
 
-    return neighborhoods_solutions;
+    servers = servers_copy;
+    local_server = local_server_copy;
+    best_solution = best_solution_copy;
+
+    log("Showing best solution founded by VND...");
+    printSolution(servers, local_server, duration_matrix, cost_matrix, rows, columns);
+    
 }

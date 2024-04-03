@@ -159,7 +159,7 @@ int main (int argc, char* argv[]) {
 
         clock_t start_vnd = clock();
 
-        vector<int> NEIGHBORHOODS_SOLUTIONS = vnd(DURATION_MATRIX, COST_MATRIX, LOCAL_SERVER_COST, servers, local_server, SERVERS_LENGTH, JOBS_LENGTH, GREEDY_SOLUTION);
+        vnd(DURATION_MATRIX, COST_MATRIX, LOCAL_SERVER_COST, servers, local_server, SERVERS_LENGTH, JOBS_LENGTH, GREEDY_SOLUTION);
 
         clock_t end_vnd = clock();
 
