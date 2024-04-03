@@ -8,7 +8,7 @@ Este projeto visa desenvolver um sistema de alocação de jobs em servidores na 
 
 Para complar o projeto, utilize o comando:
 
-`g++ main.cpp entities/job.cpp entities/server.cpp entities/local-server.cpp components/log.cpp components/print-server.cpp components/print-matrix.cpp -o main`
+`g++ main.cpp entities/*.cpp components/*.cpp -o main`
 
 Para executar o projeto no terminal, utilize o seguinte comando:
 

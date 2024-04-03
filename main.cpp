@@ -14,15 +14,17 @@
 #include "components/log.h"
 #include "components/print-server.h"
 #include "components/print-matrix.h"
+#include "components/print-solution.h"
 
 // cpp
 #include "algorithms/greedy.cpp"
-#include "components/print-solution.cpp"
+#include "algorithms/vnd.cpp"
+
 
 using namespace std;
 
 // to run project in terminal: 
-// g++ main.cpp entities/job.cpp entities/server.cpp entities/local-server.cpp components/log.cpp components/print-server.cpp components/print-matrix.cpp -o main 
+// g++ main.cpp entities/*.cpp components/*.cpp -o main  
 // then:
 // & ./'main.exe' <file path>
 // example & ./'main.exe' input.txt
@@ -142,15 +144,27 @@ int main (int argc, char* argv[]) {
 
         clock_t start_greedy = clock();
 
-        greedy(DURATION_MATRIX, COST_MATRIX, LOCAL_SERVER_COST, servers, local_server, SERVERS_LENGTH, JOBS_LENGTH);
+        int GREEDY_SOLUTION = greedy(DURATION_MATRIX, COST_MATRIX, LOCAL_SERVER_COST, servers, local_server, SERVERS_LENGTH, JOBS_LENGTH);
 
         clock_t end_greedy = clock();
 
-        log("Greedy Algorithm time execution: " + to_string((double)(end_greedy - start_greedy) / CLOCKS_PER_SEC) + "s");
-        log("Showing solution...");
+        log("Showing greedy solution...");
 
         printSolution(servers, local_server, DURATION_MATRIX, COST_MATRIX, SERVERS_LENGTH, JOBS_LENGTH);
+        log("Greedy Algorithm time execution: " + to_string((double)(end_greedy - start_greedy) / CLOCKS_PER_SEC) + "s");
 
+        endl();
+
+        log("Running VND Algorithm...");
+
+        clock_t start_vnd = clock();
+
+        vector<int> NEIGHBORHOODS_SOLUTIONS = vnd(DURATION_MATRIX, COST_MATRIX, LOCAL_SERVER_COST, servers, local_server, SERVERS_LENGTH, JOBS_LENGTH, GREEDY_SOLUTION);
+
+        clock_t end_vnd = clock();
+
+        log("VND Algorithm time execution: " + to_string((double)(end_vnd - start_vnd) / CLOCKS_PER_SEC) + "s");
+        
         clock_t end = clock();
 
         endl();
