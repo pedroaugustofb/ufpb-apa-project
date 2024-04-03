@@ -29,7 +29,7 @@ using namespace std;
  * @obs:                            both matrices have the same size
  * @obs:                            both matrices are not the original ones, because they are sorted by cost in the greedy algorithm
 */
-void vnd(int **duration_matrix, int **cost_matrix, int local_server_cost, vector<Server> &servers, LocalServer &local_server, int rows, int columns, int best_solution){
+int vnd(int **duration_matrix, int **cost_matrix, int local_server_cost, vector<Server> &servers, LocalServer &local_server, int rows, int columns, int best_solution){
 
     vector<Server> servers_copy = servers;
     LocalServer local_server_copy = local_server;
@@ -51,14 +51,13 @@ void vnd(int **duration_matrix, int **cost_matrix, int local_server_cost, vector
     } while(improvement);
 
     if (best_solution < best_solution_copy) {
-        return log("VND did not find a better solution than Greedy");
+        log("VND did not find a better solution than Greedy");
+
+        return best_solution;
     }
 
     servers = servers_copy;
     local_server = local_server_copy;
-    best_solution = best_solution_copy;
-
-    log("Showing best solution founded by VND...");
-    printSolution(servers, local_server, duration_matrix, cost_matrix, rows, columns);
     
+    return best_solution_copy;
 }
