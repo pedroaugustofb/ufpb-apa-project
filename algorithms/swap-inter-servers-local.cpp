@@ -8,25 +8,23 @@
 using namespace std;
 
 int swap_inter_server_local(vector<Server> &servers, LocalServer &local_server, int rows, int best_solution){
-   for(int i = 0; i < local_server.jobs.size(); i++){
+    vector<Server> servers_copy = servers;
+    LocalServer local_server_copy = local_server;
+
+   for(int i = 0; i < local_server_copy.jobs.size(); i++){
+       Job local_job = local_server_copy.jobs[i];
         for(int j = 0; j < rows; j++){
-            vector<Server> servers_copy = servers;
-            int server_capacity = servers_copy[j].capacity;
+            Server server = servers_copy[j];
+
             
-            for(int k = 0; k < servers[j].jobs.size(); k++){
-                LocalServer local_server_copy = local_server;
+            for(int k = 0; k < server.jobs.size(); k++){
 
                 // swap local server job with server job if the server has capacity for the new job
-                if(server_capacity - servers[j].jobs[k].duration + local_server.jobs[i].duration < 0){
+                if(server.capacity - server.jobs[k].duration + local_job.duration < 0){
                     continue;
                 }
 
-                Job job1 = servers_copy[j].jobs[k];
-                Job job2 = local_server_copy.jobs[i];
-
-                servers_copy[j].jobs[k] = job2;
-
-                local_server_copy.jobs[i] = job1;
+                swap(servers_copy[j].jobs[k], local_server_copy.jobs[i]);
 
                 int cost = calculateTotalCost(servers_copy, local_server, rows);
 

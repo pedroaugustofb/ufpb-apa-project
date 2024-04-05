@@ -40,14 +40,14 @@ int greedy(int **&duration_matrix, int **&cost_matrix, vector<Server> &servers, 
     for(int i = 0; i < columns; i++) {
         // 2. para cada job, iterar cada servidor, a fim de encontrar um servidor que tenha capacidade suficiente para alocar o job
         for(int j = 0; j < rows; j++) {
-            int capacity = servers[j].capacity;
-            int usage = servers[j].usage;
+            Server server = servers[j];
+
             int duration = duration_matrix[j][i];
             int cost = cost_matrix[j][i];
             
 
             // 3. se encontrar podemos ignorar a verificação para outros servidores e alocar o job ao servidor escolhido
-            if(capacity >= usage + duration) {
+            if(server.capacity >= server.usage + duration) {
                 servers[j].usage += duration;
                 servers[j].jobs.push_back(Job(i, duration, cost));
                 break;
