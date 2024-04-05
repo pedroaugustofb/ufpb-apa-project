@@ -4,32 +4,20 @@
 #include <time.h>
 #include <stdexcept>
 #include <ctime>
-
 // entities
 #include "entities/job.h"
 #include "entities/server.h"
 #include "entities/local-server.h"
-
 // .h
 #include "components/log.h"
 #include "components/print-server.h"
 #include "components/print-matrix.h"
 #include "components/print-solution.h"
-
 // cpp
 #include "algorithms/greedy.cpp"
 #include "algorithms/vnd.cpp"
 
-
 using namespace std;
-
-// to run project in terminal: 
-// g++ main.cpp entities/*.cpp components/*.cpp -o main  
-// then:
-// & ./'main.exe' <file path>
-// example & ./'main.exe' input.txt
-
-// to see input.txt format check README.md
 
 int main (int argc, char* argv[]) {
     try{
@@ -43,7 +31,9 @@ int main (int argc, char* argv[]) {
         string INPUT_FILE_PATH = argv[1];
 
         endl();
+
         log("Starting program...");
+
         endl();
 
         clock_t start = clock();
@@ -52,27 +42,15 @@ int main (int argc, char* argv[]) {
 
         file.open(INPUT_FILE_PATH);
 
-        if (!file.is_open()) {
-            throw runtime_error("Input file not found");
-        }
-
+        if (!file.is_open()) throw runtime_error("Input file not found");
+        
         log("Reading file (" + INPUT_FILE_PATH + ")...");
 
-        /**
-         * 1. read number of jobs, servers and local server cost
-        */
+        // 1. read number of jobs, servers and local server cost
         int JOBS_LENGTH, SERVERS_LENGTH, LOCAL_SERVER_COST;
         file >> JOBS_LENGTH >> SERVERS_LENGTH >> LOCAL_SERVER_COST;
 
-        // log("Number of Jobs to be distributed: " + to_string(JOBS_LENGTH));
-        
-        // log("Number of available servers: " + to_string(SERVERS_LENGTH));
-        
-        // log("Local server cost: " + to_string(LOCAL_SERVER_COST));
-                
-        /**
-         * 2. read servers capacities
-        */
+        // 2. read servers capacities
         vector<Server> servers;
         for (int i = 0; i < SERVERS_LENGTH; i++) {
             int capacity;
@@ -80,59 +58,25 @@ int main (int argc, char* argv[]) {
             servers.push_back(Server(capacity));
         }
 
-        /**
-         * 3. read matrix of duration ( server x job )
-         * 
-         * @example
-         * 120 80 180 95 35
-         * 145 70 230 70 40
-         * 
-         * should be read as an matrix
-         * 
-         * @obs: how we dont know the number of jobs and servers in compile time, we need to create a matrix dinamically
-        */
-        int **DURATION_MATRIX = new int*[SERVERS_LENGTH]; // start matrix with number of jobs
+        // creating dinamic matrix because we don't know the size of the matrix at compile time
+        int **DURATION_MATRIX = new int*[SERVERS_LENGTH];
+        int **COST_MATRIX = new int*[SERVERS_LENGTH];
 
+        // 3. read matrix of duration ( server x job )
         for (int i = 0; i < SERVERS_LENGTH; i++) {
-            DURATION_MATRIX[i] = new int[JOBS_LENGTH]; // for each job, create a new array with number of servers, creating a matrix
+            DURATION_MATRIX[i] = new int[JOBS_LENGTH];
             for (int j = 0; j < JOBS_LENGTH; j++) {
                 file >> DURATION_MATRIX[i][j];
             }
         }
 
-        /**
-         * 4. read matrix of cost ( server x job )
-         * 
-         * 350 50 540 245 145
-         * 410 80 500 200 100
-         * 
-         * should be read as an matrix
-        */
-        int **COST_MATRIX = new int*[SERVERS_LENGTH]; // start matrix with number of jobs
-
+        // 4. read matrix of cost ( server x job )
         for (int i = 0; i < SERVERS_LENGTH; i++) {
-            COST_MATRIX[i] = new int[JOBS_LENGTH]; // for each job, create a new array with number of servers, creating a matrix
+            COST_MATRIX[i] = new int[JOBS_LENGTH];
             for (int j = 0; j < JOBS_LENGTH; j++) {
                 file >> COST_MATRIX[i][j];
             }
         }
-
-        // endl();
-        // log("Servers: ");
-        // for (int i = 0; i < SERVERS_LENGTH; i++) {
-        //     printServer(servers[i], DURATION_MATRIX, COST_MATRIX, i);
-        //     if(i != SERVERS_LENGTH - 1) {
-        //         log("");
-        //     }
-        // }
-
-        // endl();
-        // log("Duration Matrix: ");
-        // printMatrix(DURATION_MATRIX, SERVERS_LENGTH, JOBS_LENGTH);
-
-        // endl();
-        // log("Cost Matrix: ");
-        // printMatrix(COST_MATRIX, SERVERS_LENGTH, JOBS_LENGTH);
 
         file.close();
 
@@ -149,7 +93,9 @@ int main (int argc, char* argv[]) {
         clock_t end_greedy = clock();
 
         log("Showing greedy solution...");
+
         printSolution(servers, local_server, SERVERS_LENGTH);
+
         log("Greedy Algorithm time execution: " + to_string((double)(end_greedy - start_greedy) / CLOCKS_PER_SEC) + "s");
 
         endl();
@@ -163,13 +109,17 @@ int main (int argc, char* argv[]) {
         clock_t end_vnd = clock();
 
         log("Showing best solution founded by VND...");
+
         printSolution(servers, local_server, SERVERS_LENGTH);
+
         log("VND Algorithm time execution: " + to_string((double)(end_vnd - start_vnd) / CLOCKS_PER_SEC) + "s");
 
         clock_t end = clock();
 
         endl();
+        
         log("Program time execution: " + to_string((double)(end - start) / CLOCKS_PER_SEC) + "s");
+
         endl();
 
         return 0;
