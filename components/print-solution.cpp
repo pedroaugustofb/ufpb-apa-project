@@ -6,13 +6,13 @@
 #include "log.h"
 #include "print-server.h"
 
-void printSolution(vector<Server> servers, LocalServer local_server, int **duration_matrix, int **cost_matrix, int rows, int columns){
+void printSolution(vector<Server> servers, LocalServer local_server, int rows){
     endl();
     log("----------------------------------------------------- |");
     log("Servers: ");
 
     for (int i = 0; i < rows; i++) {
-        printServer(servers[i], duration_matrix, cost_matrix, i);
+        printServer(servers[i], i);
         if(i != rows - 1) {
             log("");
         }

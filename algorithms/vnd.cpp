@@ -9,7 +9,8 @@
 #include "../components/print-matrix.h"
 #include "../components/print-solution.h"
 
-#include "swap-intra.cpp"
+#include "swap-inter-servers-local.cpp"
+
 
 using namespace std;
 
@@ -29,7 +30,7 @@ using namespace std;
  * @obs:                            both matrices have the same size
  * @obs:                            both matrices are not the original ones, because they are sorted by cost in the greedy algorithm
 */
-int vnd(int **duration_matrix, int **cost_matrix, int local_server_cost, vector<Server> &servers, LocalServer &local_server, int rows, int columns, int best_solution){
+int vnd(vector<Server> &servers, LocalServer &local_server, int rows, int columns, int best_solution){
 
     vector<Server> servers_copy = servers;
     LocalServer local_server_copy = local_server;
@@ -40,19 +41,20 @@ int vnd(int **duration_matrix, int **cost_matrix, int local_server_cost, vector<
     do {
 
         improvement = false;
-        
-        int SWAP_INTRA_SOLUTION = swapIntra(duration_matrix, cost_matrix, local_server_cost, servers_copy, local_server_copy, rows, columns, best_solution_copy);
 
-        if(SWAP_INTRA_SOLUTION < best_solution_copy){
-            best_solution_copy = SWAP_INTRA_SOLUTION;
+        // Swap Jobs that are in local server with jobs that are in servers to improve the solution
+        int solution = swap_inter_server_local(servers_copy, local_server_copy, rows, best_solution_copy);
+        
+        if(solution < best_solution_copy){
+            best_solution_copy = solution;
             improvement = true;
+            continue;
         }
 
     } while(improvement);
 
     if (best_solution < best_solution_copy) {
         log("VND did not find a better solution than Greedy");
-
         return best_solution;
     }
 

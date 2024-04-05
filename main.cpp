@@ -144,12 +144,12 @@ int main (int argc, char* argv[]) {
 
         clock_t start_greedy = clock();
 
-        int GREEDY_SOLUTION = greedy(DURATION_MATRIX, COST_MATRIX, LOCAL_SERVER_COST, servers, local_server, SERVERS_LENGTH, JOBS_LENGTH);
+        int GREEDY_SOLUTION = greedy(DURATION_MATRIX, COST_MATRIX, servers, local_server, SERVERS_LENGTH, JOBS_LENGTH);
 
         clock_t end_greedy = clock();
 
         log("Showing greedy solution...");
-        printSolution(servers, local_server, DURATION_MATRIX, COST_MATRIX, SERVERS_LENGTH, JOBS_LENGTH);
+        printSolution(servers, local_server, SERVERS_LENGTH);
         log("Greedy Algorithm time execution: " + to_string((double)(end_greedy - start_greedy) / CLOCKS_PER_SEC) + "s");
 
         endl();
@@ -158,12 +158,12 @@ int main (int argc, char* argv[]) {
 
         clock_t start_vnd = clock();
 
-        int VND_SOLUTION = vnd(DURATION_MATRIX, COST_MATRIX, LOCAL_SERVER_COST, servers, local_server, SERVERS_LENGTH, JOBS_LENGTH, GREEDY_SOLUTION);
+        int VND_SOLUTION = vnd(servers, local_server, SERVERS_LENGTH, JOBS_LENGTH, GREEDY_SOLUTION);
 
         clock_t end_vnd = clock();
 
         log("Showing best solution founded by VND...");
-        printSolution(servers, local_server, DURATION_MATRIX, COST_MATRIX, SERVERS_LENGTH, JOBS_LENGTH);
+        printSolution(servers, local_server, SERVERS_LENGTH);
         log("VND Algorithm time execution: " + to_string((double)(end_vnd - start_vnd) / CLOCKS_PER_SEC) + "s");
 
         clock_t end = clock();

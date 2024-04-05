@@ -5,6 +5,6 @@
 #ifndef PRINT_SERVER_H
 #define PRINT_SERVER_H
 
-void printServer(Server server, int **duration_matrix, int **cost_matrix, int index);
+void printServer(Server server, int index);
 
 #endif

@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void printServer(Server server,int **duration_matrix, int **cost_matrix,int index) {
+void printServer(Server server, int index) {
     log("Server " + to_string(index + 1));
     log("Capacity: " + to_string(server.capacity));
 

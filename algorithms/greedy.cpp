@@ -9,6 +9,7 @@
 #include "../components/log.h"
 #include "../components/print-server.h"
 #include "../components/print-matrix.h"
+#include "../components/calculate-total-cost.h"
 
 using namespace std;
 
@@ -18,7 +19,6 @@ using namespace std;
  * 
  * @param duration_matrix           dinamic matrix with the duration of each job in each server
  * @param cost_matrix               dinamic matrix with the cost of each job in each server
- * @param local_server_cost         cost of the local server
  * @param servers                   vector with the servers
  * @param local_server              vector with the local server
  * @param rows                      number of jobs 
@@ -26,7 +26,7 @@ using namespace std;
  * 
  * @obs:                            both matrices have the same size
 */
-int greedy(int **&duration_matrix, int **&cost_matrix, int local_server_cost, vector<Server> &servers, LocalServer &local_server, int rows, int columns) {
+int greedy(int **&duration_matrix, int **&cost_matrix, vector<Server> &servers, LocalServer &local_server, int rows, int columns) {
     
     // para tomar uma decisão vamos olhar para o tempo de execução (duration) de cada job, ignorando o custo
     // isso porque assim, olhamos para apenas a parte mais satisfatória do proximo job a ser alocado
@@ -60,15 +60,6 @@ int greedy(int **&duration_matrix, int **&cost_matrix, int local_server_cost, ve
         }
     }
 
-    int servers_total_cost = 0;
-    int local_server_total_cost = local_server.getCost();
-
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < servers[i].jobs.size(); j++) {
-            servers_total_cost += servers[i].jobs[j].cost;
-        }
-    }
-
-    return servers_total_cost + local_server_total_cost;
+    return calculateTotalCost(servers, local_server, rows);
 
 }
