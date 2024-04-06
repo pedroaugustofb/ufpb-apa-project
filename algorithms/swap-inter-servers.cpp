@@ -1,9 +1,5 @@
 #include <iostream>
-#include <vector>
-#include "../entities/server.h"
 #include "../entities/solution.h"
-#include "../entities/job.h"
-#include "../components/log.h"
 
 using namespace std;
 

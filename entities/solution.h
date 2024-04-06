@@ -27,6 +27,12 @@ public:
 
     void print();
 
+    void createFile(string filename);
+
+private:
+
+    int calculateServersCost();
+
 };
 
 #endif

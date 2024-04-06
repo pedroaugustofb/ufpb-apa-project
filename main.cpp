@@ -1,13 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <time.h>
 #include <stdexcept>
+#include <time.h>
 #include <ctime>
 // entities
-#include "entities/job.h"
 #include "entities/server.h"
-#include "entities/local-server.h"
 #include "entities/solution.h"
 // .h
 #include "components/log.h"
@@ -86,6 +84,7 @@ int main (int argc, char* argv[]) {
 
         clock_t start_greedy = clock();
 
+        // 5. run greedy algorithm
         int GREEDY_SOLUTION = greedy(solution);
 
         clock_t end_greedy = clock();
@@ -102,19 +101,33 @@ int main (int argc, char* argv[]) {
 
         clock_t start_vnd = clock();
 
+        // 6. run VND algorithm
         int VND_SOLUTION = vnd(solution);
 
         clock_t end_vnd = clock();
 
 
         if (solution.vnd_solution != solution.greedy_solution) {
+
             log("Showing best solution founded by VND..."); 
             solution.print();
+
         } else log("VND did not find a better solution than Greedy");
 
         log("VND Algorithm time execution: " + to_string((double)(end_vnd - start_vnd) / CLOCKS_PER_SEC) + "s");
 
         clock_t end = clock();
+
+        endl();
+        
+        size_t pos_open = INPUT_FILE_PATH.find('/');
+        size_t pos_close = INPUT_FILE_PATH.find('.');
+
+        string filename = "results/" + INPUT_FILE_PATH.substr(pos_open + 1, pos_close - pos_open - 1) + ".output.txt";
+        
+        log("Creating output file (" + filename + ")...");
+
+        solution.createFile(filename);
 
         endl();
         

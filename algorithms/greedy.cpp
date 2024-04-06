@@ -1,13 +1,7 @@
 #include <iostream>
-#include <vector>
-#include <climits>
-#include <algorithm>
 // .h
 #include "../entities/job.h"
-#include "../entities/server.h"
-#include "../entities/local-server.h"
 #include "../entities/solution.h"
-#include "../components/log.h"
 
 using namespace std;
 

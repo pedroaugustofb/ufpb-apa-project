@@ -1,6 +1,8 @@
-#include "solution.h"
 #include <iostream>
 #include <vector>
+#include <string>
+#include <fstream>
+#include "solution.h"
 #include "server.h"
 #include "local-server.h"
 #include "../components/log.h"
@@ -17,8 +19,13 @@ Solution::Solution(int **DURATION_MATRIX, int **COST_MATRIX, int JOBS_LENGTH, in
 }
 
 int Solution::calculate(){
-    int servers_cost = 0;
+    int servers_cost = this->calculateServersCost();
     int local_server_cost = this->local_server.jobs.size() * this->local_server.fixed_cost;
+    return servers_cost + local_server_cost;
+}
+
+int Solution::calculateServersCost(){
+    int servers_cost = 0;
 
     for (int i = 0; i < this->servers.size(); i++) {
         for (int j = 0; j < this->servers[i].jobs.size(); j++) {
@@ -27,8 +34,10 @@ int Solution::calculate(){
         }
     }
 
-    return servers_cost + local_server_cost;
+    return servers_cost;
 }
+
+
 
 
 void Solution::print(){
@@ -100,4 +109,33 @@ void Solution::print(){
 
     log("Total cost: " + to_string(servers_total_cost + local_server_total_cost));
     log("----------------------------------------------------- |");
+}
+
+void Solution::createFile(string filename){
+
+    ofstream file;
+
+    int best_solution = this->greedy_solution < this->vnd_solution ? this->greedy_solution : this->vnd_solution;
+    int serves_cost = this->calculateServersCost();
+    int local_server_cost = this->local_server.jobs.size() * this->local_server.fixed_cost;
+
+    file.open(filename);
+
+    file << best_solution << endl;
+    file << serves_cost << endl;
+    file << local_server_cost << endl;
+    file << endl;
+    
+    for (int i = 0; i < this->servers_length; i++) {
+        for (int j = 0; j < this->servers[i].jobs.size(); j++) {
+            int column = this->servers[i].jobs[j].column;
+            file << column << " ";
+        }
+        
+        if (i != this->servers_length - 1)
+            file << endl;
+    }
+
+
+    file.close();
 }
