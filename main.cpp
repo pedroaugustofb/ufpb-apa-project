@@ -8,11 +8,9 @@
 #include "entities/job.h"
 #include "entities/server.h"
 #include "entities/local-server.h"
+#include "entities/solution.h"
 // .h
 #include "components/log.h"
-#include "components/print-server.h"
-#include "components/print-matrix.h"
-#include "components/print-solution.h"
 // cpp
 #include "algorithms/greedy.cpp"
 #include "algorithms/vnd.cpp"
@@ -80,21 +78,21 @@ int main (int argc, char* argv[]) {
 
         file.close();
 
-        LocalServer local_server = LocalServer(LOCAL_SERVER_COST);  // starting a vector to store jobs that will be allocated to local server
-
         endl();
+
+        Solution solution = Solution(DURATION_MATRIX, COST_MATRIX, JOBS_LENGTH, SERVERS_LENGTH, LOCAL_SERVER_COST, servers);
 
         log("Running Greedy Algorithm...");
 
         clock_t start_greedy = clock();
 
-        int GREEDY_SOLUTION = greedy(DURATION_MATRIX, COST_MATRIX, servers, local_server, SERVERS_LENGTH, JOBS_LENGTH);
+        int GREEDY_SOLUTION = greedy(solution);
 
         clock_t end_greedy = clock();
 
         log("Showing greedy solution...");
 
-        printSolution(servers, local_server, SERVERS_LENGTH);
+        solution.print();
 
         log("Greedy Algorithm time execution: " + to_string((double)(end_greedy - start_greedy) / CLOCKS_PER_SEC) + "s");
 
@@ -104,13 +102,15 @@ int main (int argc, char* argv[]) {
 
         clock_t start_vnd = clock();
 
-        int VND_SOLUTION = vnd(servers, local_server, SERVERS_LENGTH, JOBS_LENGTH, GREEDY_SOLUTION);
+        int VND_SOLUTION = vnd(solution);
 
         clock_t end_vnd = clock();
 
-        log("Showing best solution founded by VND...");
 
-        printSolution(servers, local_server, SERVERS_LENGTH);
+        if (solution.vnd_solution != solution.greedy_solution) {
+            log("Showing best solution founded by VND..."); 
+            solution.print();
+        } else log("VND did not find a better solution than Greedy");
 
         log("VND Algorithm time execution: " + to_string((double)(end_vnd - start_vnd) / CLOCKS_PER_SEC) + "s");
 

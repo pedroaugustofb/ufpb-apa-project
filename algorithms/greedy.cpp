@@ -6,10 +6,8 @@
 #include "../entities/job.h"
 #include "../entities/server.h"
 #include "../entities/local-server.h"
+#include "../entities/solution.h"
 #include "../components/log.h"
-#include "../components/print-server.h"
-#include "../components/print-matrix.h"
-#include "../components/calculate-total-cost.h"
 
 using namespace std;
 
@@ -26,7 +24,7 @@ using namespace std;
  * 
  * @obs:                            both matrices have the same size
 */
-int greedy(int **&duration_matrix, int **&cost_matrix, vector<Server> &servers, LocalServer &local_server, int rows, int columns) {
+int greedy(Solution &solution) {
     
     // para tomar uma decisão vamos olhar para o tempo de execução (duration) de cada job, ignorando o custo
     // isso porque assim, olhamos para apenas a parte mais satisfatória do proximo job a ser alocado
@@ -37,29 +35,31 @@ int greedy(int **&duration_matrix, int **&cost_matrix, vector<Server> &servers, 
     // 4. se não encontrar, não há servidores para alocar o job, e então esse job deve ser alocado no servidor local
 
     // 1. iterar cada job
-    for(int i = 0; i < columns; i++) {
+    for(int i = 0; i < solution.jobs_length; i++) {
         // 2. para cada job, iterar cada servidor, a fim de encontrar um servidor que tenha capacidade suficiente para alocar o job
-        for(int j = 0; j < rows; j++) {
-            Server server = servers[j];
+        for(int j = 0; j < solution.servers_length; j++) {
 
-            int duration = duration_matrix[j][i];
-            int cost = cost_matrix[j][i];
+            int duration = solution.duration_matrix[j][i];
+            int cost = solution.cost_matrix[j][i];
             
 
             // 3. se encontrar podemos ignorar a verificação para outros servidores e alocar o job ao servidor escolhido
-            if(server.capacity >= server.usage + duration) {
-                servers[j].usage += duration;
-                servers[j].jobs.push_back(Job(i, duration, cost));
+            if(solution.servers[j].capacity >= solution.servers[j].usage + duration) {
+                solution.servers[j].usage += duration;
+                solution.servers[j].jobs.push_back(Job(i));
                 break;
             }
             
             // 4. se não encontrar, não há servidores para alocar o job, e então esse job deve ser alocado no servidor local
-            if(j == rows - 1) {
-                local_server.jobs.push_back(Job(i, duration, cost));
+            if(j == solution.servers_length - 1) {
+                solution.local_server.jobs.push_back(Job(i));
             }
         }
     }
 
-    return calculateTotalCost(servers, local_server, rows);
+    int greedy_solution = solution.calculate();
+    solution.greedy_solution = greedy_solution;
+    
+    return greedy_solution;
 
 }

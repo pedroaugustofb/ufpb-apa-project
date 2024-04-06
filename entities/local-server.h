@@ -9,7 +9,6 @@ using namespace std;
 
 class LocalServer {
 public:
-    LocalServer(int fixed_cost); // constructor
     int fixed_cost;
     vector<Job> jobs; // jobs allocated to this server
 

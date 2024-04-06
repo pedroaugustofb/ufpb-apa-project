@@ -3,39 +3,42 @@
 #include "../entities/server.h"
 #include "../entities/local-server.h"
 #include "../entities/job.h"
-#include "../components/calculate-total-cost.h"
 
 using namespace std;
 
-int swap_inter_server_local(vector<Server> &servers, LocalServer &local_server, int rows, int best_solution){
-    vector<Server> servers_copy = servers;
-    LocalServer local_server_copy = local_server;
+/**
+ * Swap Jobs that are in local server with jobs that are in servers to improve the solution
+*/
+int swap_inter_server_local(Solution &solution, int result){
+    Solution solution_copy = solution;
 
-   for(int i = 0; i < local_server_copy.jobs.size(); i++){
-       Job local_job = local_server_copy.jobs[i];
-        for(int j = 0; j < rows; j++){
-            Server server = servers_copy[j];
+   for(int i = 0; i < solution_copy.local_server.jobs.size(); i++){
+       Job local_job = solution_copy.local_server.jobs[i];
+        for(int j = 0; j < solution_copy.servers.size(); j++){
+            Server server = solution_copy.servers[j];
 
-            
             for(int k = 0; k < server.jobs.size(); k++){
 
+                int server_job_duration = solution_copy.duration_matrix[j][server.jobs[k].column];
+
+                int local_job_duration = solution_copy.duration_matrix[j][local_job.column];
+
                 // swap local server job with server job if the server has capacity for the new job
-                if(server.capacity - server.jobs[k].duration + local_job.duration < 0){
+                if(server.capacity - server_job_duration + local_job_duration < 0){
                     continue;
                 }
 
-                swap(servers_copy[j].jobs[k], local_server_copy.jobs[i]);
+                swap(solution_copy.servers[j].jobs[k], solution_copy.local_server.jobs[i]);
 
-                int cost = calculateTotalCost(servers_copy, local_server, rows);
+                int cost = solution_copy.calculate();
 
-                if(cost < best_solution){
-                    servers = servers_copy;
-                    local_server = local_server_copy;
-                    best_solution = cost;
+                if(cost < result){
+                    result = cost;
+                    solution = solution_copy;
                 }
             }
         }
     }
     
-    return best_solution;
+    return result;
 }

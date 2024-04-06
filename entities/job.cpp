@@ -1,7 +1,5 @@
 #include "job.h"
 
-Job::Job(int column, int duration, int cost) {
+Job::Job(int column) {
     this->column = column;
-    this->duration = duration;
-    this->cost = cost;
 }

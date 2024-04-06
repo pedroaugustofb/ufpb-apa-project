@@ -4,12 +4,12 @@
 
 #include "../entities/server.h"
 #include "../entities/local-server.h"
+#include "../entities/solution.h"
 
 #include "../components/log.h"
-#include "../components/print-matrix.h"
-#include "../components/print-solution.h"
 
 #include "swap-inter-servers-local.cpp"
+#include "swap-inter-servers.cpp"
 
 
 using namespace std;
@@ -30,11 +30,10 @@ using namespace std;
  * @obs:                            both matrices have the same size
  * @obs:                            both matrices are not the original ones, because they are sorted by cost in the greedy algorithm
 */
-int vnd(vector<Server> &servers, LocalServer &local_server, int rows, int columns, int best_solution){
+int vnd(Solution &solution){
 
-    vector<Server> servers_copy = servers;
-    LocalServer local_server_copy = local_server;
-    int best_solution_copy = best_solution;
+    Solution solution_copy = solution;
+    int vnc_solution = solution.greedy_solution;
 
     bool improvement = true;
 
@@ -43,23 +42,29 @@ int vnd(vector<Server> &servers, LocalServer &local_server, int rows, int column
         improvement = false;
 
         // Swap Jobs that are in local server with jobs that are in servers to improve the solution
-        int solution = swap_inter_server_local(servers_copy, local_server_copy, rows, best_solution_copy);
+        int solution_1 = swap_inter_server_local(solution_copy, vnc_solution);
         
-        if(solution < best_solution_copy){
-            best_solution_copy = solution;
+        if(solution_1 < vnc_solution){
+            vnc_solution = solution_1;
             improvement = true;
             continue;
         }
 
+        // Swap Jobs that are in servers with jobs that are in others servers to improve the solution
+        int solution_2 = swap_inter_servers(solution_copy, vnc_solution);
+
+        if(solution_2 < vnc_solution){
+            vnc_solution = solution_2;
+            improvement = true;
+            continue;
+        }
+    
     } while(improvement);
 
-    if (best_solution < best_solution_copy) {
-        log("VND did not find a better solution than Greedy");
-        return best_solution;
-    }
+    solution.servers = solution_copy.servers;
+    solution.local_server = solution_copy.local_server;
 
-    servers = servers_copy;
-    local_server = local_server_copy;
+    solution.vnd_solution = solution.greedy_solution <= vnc_solution ? solution.greedy_solution : vnc_solution;
     
-    return best_solution_copy;
+    return solution.vnd_solution;
 }
