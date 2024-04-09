@@ -2,6 +2,7 @@
 #include <vector>
 #include <time.h>
 #include "../entities/solution.h"
+#include "move-from-local.cpp"
 #include "move-to-local.cpp"
 #include "swap-inter-servers-local.cpp"
 #include "swap-inter-servers.cpp"
@@ -52,6 +53,15 @@ int vnd(Solution &solution){
 
         if(solution_3 < vnc_solution){
             vnc_solution = solution_3;
+            improvement = true;
+            continue;
+        }
+
+        // Move Jobs that are in local server to servers to improve the solution
+        int solution_4 = move_from_local(solution_copy, vnc_solution);
+
+        if(solution_4 < vnc_solution){
+            vnc_solution = solution_4;
             improvement = true;
             continue;
         }

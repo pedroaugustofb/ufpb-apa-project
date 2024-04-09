@@ -1,4 +1,6 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
 // .h
 #include "../entities/job.h"
 #include "../entities/solution.h"
@@ -27,6 +29,39 @@ int greedy(Solution &solution) {
     // 2. para cada job, iterar cada servidor, a fim de encontrar um servidor que tenha capacidade suficiente para alocar o job
     // 3. se encontrar podemos ignorar a verificação para outros servidores e alocar o job ao servidor escolhido
     // 4. se não encontrar, não há servidores para alocar o job, e então esse job deve ser alocado no servidor local
+
+    // Ordenar as colunas das matrizes de acordo com a duração dos jobs
+    vector<pair<int, int>> sum_columns;
+    for(int i = 0; i < solution.jobs_length; i++) {
+        int sum = 0;
+        for(int j = 0; j < solution.servers_length; j++) {
+            sum += solution.cost_matrix[j][i];
+        }
+        sum_columns.push_back(make_pair(sum, i));
+    }
+
+    // 2. ordenar colunas das matrizes de acordo com o custo
+    sort(sum_columns.begin(), sum_columns.end(), less<pair<int, int>>());
+
+    // 3. reordenar as colunas das matrizes de com a ordem obtida no passo 2
+    int **new_duration_matrix = new int*[solution.servers_length];
+    int **new_cost_matrix = new int*[solution.servers_length];
+
+    for(int i = 0; i < solution.servers_length; i++) {
+        new_duration_matrix[i] = new int[solution.jobs_length];
+        new_cost_matrix[i] = new int[solution.jobs_length];
+    }
+
+    for(int i = 0; i < solution.jobs_length; i++) {
+        int column = sum_columns[i].second;
+        for(int j = 0; j < solution.servers_length; j++) {
+            new_duration_matrix[j][i] = solution.duration_matrix[j][column];
+            new_cost_matrix[j][i] = solution.cost_matrix[j][column];
+        }
+    }
+
+    solution.duration_matrix = new_duration_matrix;
+    solution.cost_matrix = new_cost_matrix;
 
     // 1. iterar cada job
     for(int i = 0; i < solution.jobs_length; i++) {
