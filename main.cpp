@@ -21,7 +21,9 @@ int main (int argc, char* argv[]) {
         if(argc == 0)
             throw runtime_error("Please, provide the input file path");
         
-        if(argc > 2)
+        string source = argv[2];
+
+        if(argc > 2 && source != "-m")
             throw runtime_error("Too many arguments, please provide only the input file path");
 
         string INPUT_FILE_PATH = argv[1];
@@ -120,8 +122,8 @@ int main (int argc, char* argv[]) {
 
         endl();
         
-        size_t pos_open = INPUT_FILE_PATH.find('/');
-        size_t pos_close = INPUT_FILE_PATH.find('.');
+        size_t pos_open = source == "-m" ? INPUT_FILE_PATH.find('/', 2) : INPUT_FILE_PATH.find('/');
+        size_t pos_close  = source == "-m" ? INPUT_FILE_PATH.find('.', pos_open + 1) : INPUT_FILE_PATH.find('.');
 
         string filename = "results/" + INPUT_FILE_PATH.substr(pos_open + 1, pos_close - pos_open - 1) + ".output.txt";
         
