@@ -7,18 +7,8 @@
 #include "swap-inter-servers-local.cpp"
 #include "swap-inter-servers.cpp"
 
-
 using namespace std;
 
-
-/**
- * VND - Variable Neighborhood Descent
- * 
- * @param solution                                  solution to be improved
- * 
- * @returns best result if founded                  the improved solution
- * otherwise returns before solution                
-*/
 int vnd(Solution &solution){
 
     Solution solution_copy = solution;

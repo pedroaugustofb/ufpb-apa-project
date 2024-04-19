@@ -6,7 +6,12 @@ using namespace std;
 int swap_inter_servers(Solution &solution, int result){
 
     Solution solution_copy = solution;
+
+    // Objetivo: Trocar Jobs de Servidores se a troca for benéfica
+    // 1. Para a troca acontecer é necessário que os servidores tenham capacidade para a troca
+    // 2. A troca só acontece se a solução for melhor que a atual
     
+    // TODO: Refatorar complexidade
     for(int i = 0; i < solution_copy.servers.size(); i++){
         for(int j = 0; j < solution_copy.servers.size(); j++){
             if (i == j) continue;

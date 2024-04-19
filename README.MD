@@ -42,3 +42,18 @@ O objetivo principal deste sistema é alocar cada job em um dos servidores, resp
 Alocar cada job em um dos servidores, sem exceder suas capacidades, e minimizar o custo total para a empresa.
 
 A resposta detalhada será registrada no arquivo `response.txt` em `/response/response.txt`.
+
+### Lista de Melhorias
+
+✔️- Modificar algoritmo Guloso
+
+    ✔️- Mudar critério guloso
+
+❌ - Modificar Swag Inter Servers to Move Server From Server
+-> Não melhorou resultados
+
+- App está usando algoritmos prontos como swap, comentar complexidade em todos os usos.
+
+- Comentar todo código para facilitar apresentação
+
+⌛ - Implementar Lista Encadeada para Jobs dentro do Servidor

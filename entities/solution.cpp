@@ -45,39 +45,39 @@ void Solution::print(){
     log("----------------------------------------------------- |");
     log("Servers: ");
 
-    for (int i = 0; i < this->servers_length; i++) {
-        Server server = this->servers[i];
-        log("Server " + to_string(i + 1));
-        log("Capacity: " + to_string(server.capacity));
+    // for (int i = 0; i < this->servers_length; i++) {
+    //     Server server = this->servers[i];
+    //     log("Server " + to_string(i + 1));
+    //     log("Capacity: " + to_string(server.capacity));
 
-        if(server.jobs.size() == 0) {
-            log("No jobs allocated to this server");
-            continue;
-        }
+    //     if(server.jobs.size() == 0) {
+    //         log("No jobs allocated to this server");
+    //         continue;
+    //     }
 
-        log("Jobs allocated to this server: ");
-        for (int j = 0; j < server.jobs.size(); j++) {
-            int column = server.jobs[j].column;
-            int duration = this->duration_matrix[i][column];
-            int cost = this->cost_matrix[i][column];
+    //     log("Jobs allocated to this server: ");
+    //     for (int j = 0; j < server.jobs.size(); j++) {
+    //         int column = server.jobs[j].column;
+    //         int duration = this->duration_matrix[i][column];
+    //         int cost = this->cost_matrix[i][column];
 
-            log("Job " + to_string(column) + ": " + "(duration: " + to_string(duration) + ") (cost: " + to_string(cost) + ")");
-        }
+    //         log("Job " + to_string(column) + ": " + "(duration: " + to_string(duration) + ") (cost: " + to_string(cost) + ")");
+    //     }
 
-        log("Total time allocated: " + to_string(server.usage));
+    //     log("Total time allocated: " + to_string(server.usage));
 
-        int cost = 0;
+    //     int cost = 0;
 
-        for (int j = 0; j < server.jobs.size(); j++) {
-            int column = server.jobs[j].column;
-            cost += this->cost_matrix[i][column];
-        }
+    //     for (int j = 0; j < server.jobs.size(); j++) {
+    //         int column = server.jobs[j].column;
+    //         cost += this->cost_matrix[i][column];
+    //     }
 
-        log("Total cost: " + to_string(cost));
-        if(i != this->servers_length - 1) {
-            log("");
-        }
-    }
+    //     log("Total cost: " + to_string(cost));
+    //     if(i != this->servers_length - 1) {
+    //         log("");
+    //     }
+    // }
 
     log("");
     int servers_total_cost = 0;
@@ -95,13 +95,13 @@ void Solution::print(){
 
     log("");
 
-    if(this->local_server.jobs.size() > 0) {
-        log("Local Jobs: ");
-        for (int i = 0; i < this->local_server.jobs.size(); i++) {
-            int column = this->local_server.jobs[i].column;
-            log("Job " + to_string(column));
-        }
-    }
+    // if(this->local_server.jobs.size() > 0) {
+    //     log("Local Jobs: ");
+    //     for (int i = 0; i < this->local_server.jobs.size(); i++) {
+    //         int column = this->local_server.jobs[i].column;
+    //         log("Job " + to_string(column));
+    //     }
+    // }
 
     log("Local server total cost ( for " + to_string(this->local_server.jobs.size()) + " job(s) ): " + to_string(local_server_total_cost));
 
