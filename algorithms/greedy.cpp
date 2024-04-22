@@ -90,13 +90,13 @@ int greedy(Solution &solution) {
 
         // Se não foi encontrado um servidor disponível para o job i, o job i deve ser alocado no servidor local
         if(best_server_index == -1) {
-            solution.local_server.jobs.push_back(Job(i));
+            solution.local_server.jobs.push_back(Job(i, -1));
             continue;
         }
 
         // Alocando o job i no servidor que lhe proporciona o menor custo
         solution.servers[best_server_index].usage += solution.duration_matrix[best_server_index][i];
-        solution.servers[best_server_index].jobs.push_back(Job(i));
+        solution.servers[best_server_index].jobs.push_back(Job(i, best_server_index));
     }
 
     // Calcula o custo da solução gulosa

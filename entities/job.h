@@ -6,8 +6,9 @@
 
 class Job {
 public:
-    Job(int column); // constructor
+    Job(int column, int row); // constructor
     int column; // matrices column index
+    int row; // matrices row index
 };
 
 #endif
