@@ -16,7 +16,7 @@ Para executar o projeto no terminal, utilize o seguinte comando:
 
 Se tiver muitos arquivos de entrada poderá utilizar Bun Runtime para rodar todos os scripts de uma vez só através de:
 
-`bun main.ts`
+`python main.py`
 
 example:
 
