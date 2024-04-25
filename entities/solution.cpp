@@ -31,7 +31,7 @@ int Solution::calculateServersCost(){
         for (int j = 0; j < this->servers[i].jobs.size(); j++) {
             int column = this->servers[i].jobs[j].column;
             int row = this->servers[i].jobs[j].row;
-            servers_cost += this->cost_matrix[row][column];
+            servers_cost += this->cost_matrix[i][column];
         }
     }
 

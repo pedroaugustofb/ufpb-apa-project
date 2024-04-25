@@ -44,11 +44,11 @@ int main (int argc, char* argv[]) {
         
         log("Reading file (" + INPUT_FILE_PATH + ")...");
 
-        // 1. read number of jobs, servers and local server cost
+        // Ler informações sobre o problema
         int JOBS_LENGTH, SERVERS_LENGTH, LOCAL_SERVER_COST;
         file >> JOBS_LENGTH >> SERVERS_LENGTH >> LOCAL_SERVER_COST;
 
-        // 2. read servers capacities
+        // Ler informações sobre os servidores
         vector<Server> servers;
         for (int i = 0; i < SERVERS_LENGTH; i++) {
             int capacity;
@@ -56,11 +56,11 @@ int main (int argc, char* argv[]) {
             servers.push_back(Server(capacity));
         }
 
-        // creating dinamic matrix because we don't know the size of the matrix at compile time
+        // Crianção das matrizes de duração e custo de forma dinâmica, pois o tamanho é definido em tempo de execução
         int **DURATION_MATRIX = new int*[SERVERS_LENGTH];
         int **COST_MATRIX = new int*[SERVERS_LENGTH];
 
-        // 3. read matrix of duration ( server x job )
+        // Ler matrizes de duração
         for (int i = 0; i < SERVERS_LENGTH; i++) {
             DURATION_MATRIX[i] = new int[JOBS_LENGTH];
             for (int j = 0; j < JOBS_LENGTH; j++) {
@@ -68,7 +68,7 @@ int main (int argc, char* argv[]) {
             }
         }
 
-        // 4. read matrix of cost ( server x job )
+        // Ler matrizes de custo
         for (int i = 0; i < SERVERS_LENGTH; i++) {
             COST_MATRIX[i] = new int[JOBS_LENGTH];
             for (int j = 0; j < JOBS_LENGTH; j++) {
@@ -86,7 +86,7 @@ int main (int argc, char* argv[]) {
 
         clock_t start_greedy = clock();
 
-        // 5. run greedy algorithm
+        // Execução do algoritmo guloso
         int GREEDY_SOLUTION = greedy(solution);
 
         clock_t end_greedy = clock();
@@ -103,11 +103,10 @@ int main (int argc, char* argv[]) {
 
         clock_t start_vnd = clock();
 
-        // 6. run VND algorithm
+        // Execução do algoritmo VND
         int VND_SOLUTION = vnd(solution);
 
         clock_t end_vnd = clock();
-
 
         if (solution.vnd_solution != solution.greedy_solution) {
 

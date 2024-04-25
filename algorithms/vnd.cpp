@@ -4,7 +4,6 @@
 #include "../entities/solution.h"
 #include "move-from-local.cpp"
 #include "move-to-local.cpp"
-#include "swap-inter-servers-local.cpp"
 #include "swap-inter-servers.cpp"
 
 using namespace std;
@@ -20,38 +19,21 @@ int vnd(Solution &solution){
 
         improvement = false;
 
-        // Swap Jobs that are in local server with jobs that are in servers to improve the solution
-        int solution_1 = swap_inter_server_local(solution_copy, vnc_solution);
-        
-        if(solution_1 < vnc_solution){
-            vnc_solution = solution_1;
-            improvement = true;
-            continue;
-        }
-
         // Swap Jobs that are in servers with jobs that are in others servers to improve the solution
-        int solution_2 = swap_inter_servers(solution_copy, vnc_solution);
-
-        if(solution_2 < vnc_solution){
-            vnc_solution = solution_2;
-            improvement = true;
-            continue;
-        }
+        swap_inter_servers(solution_copy);
 
         // Move Jobs that are in servers to local server to improve the solution
-        int solution_3 = move_to_local(solution_copy, vnc_solution);
-
-        if(solution_3 < vnc_solution){
-            vnc_solution = solution_3;
-            improvement = true;
-            continue;
-        }
+        // Complexidade O(n^2)
+        move_to_local(solution_copy);
 
         // Move Jobs that are in local server to servers to improve the solution
-        int solution_4 = move_from_local(solution_copy, vnc_solution);
+        // Complexidade O(n^2)
+        move_from_local(solution_copy);
 
-        if(solution_4 < vnc_solution){
-            vnc_solution = solution_4;
+        int new_result = solution_copy.calculate();
+
+        if(new_result < vnc_solution){
+            vnc_solution = new_result;
             improvement = true;
             continue;
         }
