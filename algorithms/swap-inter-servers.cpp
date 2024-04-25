@@ -21,18 +21,23 @@ int swap_inter_servers(Solution &solution, int result){
                     int duration_k = solution_copy.duration_matrix[i][solution_copy.servers[i].jobs[k].column];
                     int duration_l = solution_copy.duration_matrix[j][solution_copy.servers[j].jobs[l].column];
                     
-                    // verify if the servers have capacity for the new jobs
+                    // Se a troca não for possível, pula para a próxima iteração
                     if (solution_copy.servers[i].capacity - duration_k + duration_l < 0 ||
                         solution_copy.servers[j].capacity - duration_l + duration_k < 0) {
                         continue;
                     }
 
-                    // swap jobs if the servers have capacity for the new jobs
+                    // Troca os Jobs
+                    // Complexidade do swap: O(1)
                     swap(solution_copy.servers[i].jobs[k], solution_copy.servers[j].jobs[l]);
 
-                    // update the servers usage
+                    // Atualiza a capacidade dos servidores
                     solution_copy.servers[i].usage -= duration_k - duration_l;
                     solution_copy.servers[j].usage -= duration_l - duration_k;
+
+                    // Atualiza o row dos Jobs
+                    solution_copy.servers[i].jobs[k].row = i;
+                    solution_copy.servers[j].jobs[l].row = j;
 
                     int cost = solution_copy.calculate();
 
@@ -42,12 +47,17 @@ int swap_inter_servers(Solution &solution, int result){
                         continue;
                     }
 
-                    // swap back if the cost is not better
+                    // Se o custo não for menor, desfaz a alteração:
+                    // Complexidade do swap: O(1)
                     swap(solution_copy.servers[i].jobs[k], solution_copy.servers[j].jobs[l]);
 
-                    // update the servers usage
+                    // Atualiza a capacidade dos servidores
                     solution_copy.servers[i].usage += duration_k - duration_l;
                     solution_copy.servers[j].usage += duration_l - duration_k;
+
+                    // Atualiza o row dos Jobs
+                    solution_copy.servers[i].jobs[k].row = i;
+                    solution_copy.servers[j].jobs[l].row = j;
                 }
             }            
         }
